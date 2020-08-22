@@ -25,20 +25,23 @@ source-repository head
 
 library
   exposed-modules:
+      Discounts
       Lib
       MinTree
+      StoreModel
+      Tree
   other-modules:
       Paths_aula6
   hs-source-dirs:
       src
   build-depends:
       base >=4.7 && <5
+    , containers
   default-language: Haskell2010
 
 executable aula6-exe
   main-is: Aula6.lhs
   other-modules:
-      Main
       Paths_aula6
   hs-source-dirs:
       app
@@ -46,6 +49,7 @@ executable aula6-exe
   build-depends:
       aula6
     , base >=4.7 && <5
+    , containers
   default-language: Haskell2010
 
 test-suite aula6-test
@@ -59,4 +63,5 @@ test-suite aula6-test
   build-depends:
       aula6
     , base >=4.7 && <5
+    , containers
   default-language: Haskell2010

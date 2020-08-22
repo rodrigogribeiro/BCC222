@@ -4,7 +4,7 @@ Classes de tipos
 Nos últimos vídeos, abordamos o problema
 de definir árvores binárias de busca.
 
-> data Tree a
+> data Tree a -- polimórfica: variável de tipo.
 >    = Leaf
 >    | Node a (Tree a) (Tree a)
 >    deriving Show
@@ -38,8 +38,8 @@ de comparação.
 
 > data LtEq a
 >   = LtEq {
->       lt :: a -> a -> Bool
->     , eq :: a -> a -> Bool
+>       lt :: a -> a -> Bool -- menor, <
+>     , eq :: a -> a -> Bool -- igualdade, ==
 >     }
 
 Usando o registro acima, temos a seguinte versão de
@@ -79,9 +79,11 @@ tipo e uma sequência de assinaturas de tipos de funções.
 A seguir, apresento um exemplo de classe de tipos que
 define operações de igualdade:
 
+
 class Eq a where
-  (==) :: a -> a -> Bool
-  (/=) :: a -> a -> Bool
+  (==) :: a -> a -> Bool -- igualdade
+  (/=) :: a -> a -> Bool -- desigualdade
+
 
 A definição acima declara uma classe de nome Eq que
 possui um parâmetro de tipo, a, e duas definições de
@@ -301,3 +303,10 @@ padrão de algumas classes para novos tipos de dados. Para
 acionar esse recurso basta adicionar a cláusula deriving
 a definição de um tipo. O GHC pode gerar instâncias das
 classes Eq, Ord, Show e Read e de muitas outras.
+
+> search :: Eq a => a -> [a] -> Bool
+> search _ [] = False
+> search v (x : xs) = v == x || search v xs
+
+> main :: IO ()
+> main = return ()

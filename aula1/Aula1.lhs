@@ -29,7 +29,7 @@ Haskell Stack
 
 Intepretador
 ============
-
+k
 - No terminal, digite `stack ghci` e você irá obter o prompt do interpretador:
 
 ~~~~~{.haskell}
