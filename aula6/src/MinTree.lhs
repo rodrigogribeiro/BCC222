@@ -35,7 +35,7 @@ seguintes registros:
 >       name  :: Name
 >     , kind  :: BeerType
 >     , price :: Double
->     } deriving (Eq, Ord, Show)
+>     } deriving (Eq, Ord, Show) -- cláusula de deriving
 
 O significado de cada um dos tipos anteriores e
 de seus campos é imediato.
@@ -185,11 +185,17 @@ de tipos para a estrutura de monóide.
 class Semigroup a where
   (<>) :: a -> a -> a
 
+x <> (y <> z) = (x <> y) <> z, <> é associativo.
+
 class Semigroup a => Monoid a where
-  mempty  :: a
+  mempty  :: a -- elemento neutro.
   mappend :: a -> a -> a
   -- implementação padrão.
   mappend = (<>)
+
+x <> mempty = x
+mempty <> x = x
+
 
 A idéia é que mempty represente um elemento neutro
 para a operação mappend (<>) sobre o tipo a.

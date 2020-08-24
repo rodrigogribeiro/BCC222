@@ -91,6 +91,8 @@ valor associado a uma chave em um Map.
 > kaiser
 >   = M.lookup (Name "Kaiser") mapDB
 
+data Maybe a = Nothing | Just a
+
 Evidentemente, o tipo Map suporta muitas
 outras operações como inserção, remoção,
 contar número de elementos, etc.
@@ -182,7 +184,7 @@ Por exemplo, as definições de Functor para listas e árvores
 é como se segue:
 
 instance Functor [] where
-  fmap f = map f
+  fmap = map
 
 > instance Functor Tree where
 >   fmap _ Leaf = Leaf
@@ -209,8 +211,8 @@ classe Foldable é a generalização de foldr. A definição
 de Foldable é como se segue:
 
 class Foldable f where
-  foldMap :: Monoid m => (a -> m) -> f a -> m
-  foldr   :: (a -> b -> b) -> b -> f a -> b
+  foldMap :: Monoid m => (a -> m) -> f a -> m *
+  foldr   :: (a -> b -> b) -> b -> f a -> b   *
 
   fold    :: Monoid m => f m -> m
   foldr'  :: (a -> b -> b) -> b -> f a -> b
@@ -223,3 +225,9 @@ Apesar de possuir várias funções, não é necessário
 implementar todas elas. Basicamente, basta codificar
 foldMap ou foldr que são usadas para definir todas
 as outras funções.
+
+> totalPrice :: Foldable f => f Product -> Double
+> totalPrice
+>     = foldr step 0
+>       where
+>         step p ac = price p + ac
