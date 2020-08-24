@@ -27,6 +27,7 @@ library
   exposed-modules:
       Aula7
       Lib
+      StoreModel
   other-modules:
       Paths_aula7
   hs-source-dirs:
