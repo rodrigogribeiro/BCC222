@@ -29,3 +29,5 @@ cabal.project.local~
 *.html
 *.mkv
 *.mp4
+*reveal*
+*.js
