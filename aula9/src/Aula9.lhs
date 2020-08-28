@@ -470,6 +470,17 @@ v1 ,v2 :: Maybe Int
 g <$> v1 <*> v2 :: Maybe Int
 ```
 
+Solução
+=======
+
+- Observe que:
+
+```haskell
+g <$> v1 :: Maybe (Int -> Int)
+(<*>)    :: f     (a   -> b)   -> f      a    -> f     Int
+v2       ::                       Maybe  Int  -> Maybe b
+```
+
 Resumo
 ======
 
