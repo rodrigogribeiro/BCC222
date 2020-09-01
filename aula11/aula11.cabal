@@ -4,11 +4,11 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 
-name:           aula10
+name:           aula11
 version:        0.1.0.0
-description:    Please see the README on GitHub at <https://github.com/githubuser/aula10#readme>
-homepage:       https://github.com/githubuser/aula10#readme
-bug-reports:    https://github.com/githubuser/aula10/issues
+description:    Please see the README on GitHub at <https://github.com/githubuser/aula11#readme>
+homepage:       https://github.com/githubuser/aula11#readme
+bug-reports:    https://github.com/githubuser/aula11/issues
 author:         Author name here
 maintainer:     example@example.com
 copyright:      2020 Author name here
@@ -21,46 +21,41 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/githubuser/aula10
+  location: https://github.com/githubuser/aula11
 
 library
   exposed-modules:
-      Aula10
-      Guess
-      Hangman
+      Aula11
       Lib
   other-modules:
-      Paths_aula10
+      Paths_aula11
   hs-source-dirs:
       src
   build-depends:
       base >=4.7 && <5
-    , random
   default-language: Haskell2010
 
-executable aula10-exe
+executable aula11-exe
   main-is: Main.hs
   other-modules:
-      Paths_aula10
+      Paths_aula11
   hs-source-dirs:
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      aula10
+      aula11
     , base >=4.7 && <5
-    , random
   default-language: Haskell2010
 
-test-suite aula10-test
+test-suite aula11-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      Paths_aula10
+      Paths_aula11
   hs-source-dirs:
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      aula10
+      aula11
     , base >=4.7 && <5
-    , random
   default-language: Haskell2010

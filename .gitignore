@@ -31,3 +31,5 @@ cabal.project.local~
 *.mp4
 *reveal*
 *.js
+provas*
+teste*
