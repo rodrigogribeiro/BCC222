@@ -39,7 +39,9 @@ Parser?
 
 \begin{code}
 newtype Parser s a
-  = Parser {runParser :: [s] -> [(a,[s])]}
+  = Parser {
+    runParser :: [s] -> [(a,[s])]
+    }
 \end{code}
 
 Parser
@@ -72,11 +74,12 @@ Exemplo
 \begin{code}
 symbol :: Eq s => s -> Parser s s
 symbol s
-  = Parser (\ inp -> case inp of
-                       [] -> []
-                       (x : xs) -> if x == s
-                                   then [(x,xs)]
-                                   else [])
+  = Parser (\ inp ->
+       case inp of
+         [] -> []
+         (x : xs) -> if x == s
+                     then [(x,xs)]
+                     else [])
 \end{code}
 
 
@@ -104,11 +107,14 @@ Strings
 - Processando uma sequência de símbolos
 
 \begin{code}
-token :: Eq s => [s] -> Parser s [s]
+token :: Eq s =>
+         [s]  ->
+         Parser s [s]
 token s
-  = Parser (\ inp -> if s == (take n inp)
-                     then [(s, drop n inp)]
-                     else [])
+  = Parser (\ inp ->
+        if s == (take n inp)
+        then [(s, drop n inp)]
+        else [])
     where
       n = length s
 \end{code}
@@ -122,11 +128,13 @@ certa condição.
 
 \begin{code}
 sat :: (s -> Bool) -> Parser s s
-sat p = Parser (\ inp -> case inp of
-                           [] -> []
-                           (x : xs) -> if p x
-                                       then [(x,xs)]
-                                       else [])
+sat p = Parser (\ inp ->
+        case inp of
+          [] -> []
+          (x : xs) ->
+            if p x
+            then [(x,xs)]
+            else [])
 \end{code}
 
 Digit Parser
@@ -156,9 +164,12 @@ Functor
 \begin{code}
 instance Functor (Parser s) where
    fmap f (Parser p)
-      = Parser (\ inp -> [(f x, xs) | (x,xs) <- p inp])
+      = Parser (\ inp ->
+    [(f x, xs) | (x,xs) <- p inp])
 \end{code}
 
+fmap :: (a -> b) -> Parser s a
+                 -> Parser s b
 
 Digit Parser
 ===========
@@ -198,7 +209,8 @@ infixr 4 <|>
 
 (<|>) :: Parser s a -> Parser s a -> Parser s a
 (Parser p) <|> (Parser q)
-   = Parser (\ inp -> p inp ++ q inp)
+   = Parser (\ inp -> p inp ++
+                      q inp)
 \end{code}
 
 
@@ -212,8 +224,9 @@ Combinadores
 instance Applicative (Parser s) where
    pure = succeed
    (Parser p) <*> (Parser q)
-     = Parser (\ inp -> [(f x, xs) | (f, ys) <- p inp
-                                   , (x, xs) <- q ys])
+     = Parser (\ inp ->
+    [(f x, xs) | (f, ys) <- p inp
+               , (x, xs) <- q ys])
 \end{code}
 
 
