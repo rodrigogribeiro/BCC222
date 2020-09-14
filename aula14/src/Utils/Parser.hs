@@ -4,6 +4,7 @@ module Utils.Parser ( Parser
                     , token
                     , sat
                     , digitChar
+                    , spaces
                     , succeed
                     , failure
                     , (<|>)
@@ -63,6 +64,9 @@ sat p = Parser (\ inp ->
 
 digitChar :: Parser Char Char
 digitChar = sat isDigit
+
+spaces :: Parser Char String
+spaces = greedy (sat isSpace)
 
 succeed :: a -> Parser s a
 succeed v = Parser (\ inp -> [(v,inp)])

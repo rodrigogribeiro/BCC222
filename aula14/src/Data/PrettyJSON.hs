@@ -1,4 +1,4 @@
-module Data.PrettyJSON where
+module Data.PrettyJSON (prettyJSON) where
 
 import Data.JSON
 import Utils.Pretty

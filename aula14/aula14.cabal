@@ -26,6 +26,8 @@ source-repository head
 library
   exposed-modules:
       Data.JSON
+      Data.JSONLib
+      Data.ParserJSON
       Data.PrettyJSON
       Lib
       Utils.Lens
