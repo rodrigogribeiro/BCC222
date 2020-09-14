@@ -196,9 +196,14 @@ Composição
 
 ```haskell
 (@@) :: Lens s s1 -> Lens s1 a -> Lens s a
-(Lens v1 s1) @@ (Lens v2 s2)
+(Lens v1 u1) @@ (Lens v2 u2)
   = Lens (v2 . v1)
-         (\ a s -> s1 (s2 a (v1 s)) s)
+         (\ a s -> u1 (u2 a (v1 s)) s)
+
+u1 :: s1 -> s -> s
+v1 :: s -> s1
+u2 :: a  -> s1 -> s1
+v2 :: s1 -> a
 ```
 
 Composição
@@ -535,6 +540,11 @@ Equivalência
 lens :: (s -> a) -> (a -> s -> s) -> Lens s a
 lens vw st trans s
   = flip st s <$> trans (vw s)
+
+vw :: s -> a              flip st :: (s -> a -> s)
+st :: a -> s -> s         flip st s :: (a -> s)
+trans :: a -> f a         trans (vw s) :: f a
+vw s :: a                 flip st s <$> trans (vw s) :: f s
 ```
 
 Equivalência
@@ -681,10 +691,7 @@ Aplicações
       consultado sem existir!
 
 ```haskell
-data Temp
-  = Temp {
-      _celsius :: Float
-    } deriving Show
+data Temp = Temp { _celsius :: Float } deriving Show
 
 celsius :: Lens Temp Float
 celsius = ...
@@ -694,7 +701,10 @@ farenheint f (Temp c)
   = (\ fa -> Temp (ftc fa)) <$> (f (ctf c))
 
 -- ftc, ctf :: Float -> Float
+
 ```
+
+
 
 Aplicações
 ==========
