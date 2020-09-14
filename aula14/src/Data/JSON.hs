@@ -8,9 +8,10 @@ module Data.JSON ( JSON (..)
                  , at
                  , lookupJSON) where
 
-
+import Control.Applicative (liftA2)
+import Data.Char
 import Utils.Lens
-
+import Test.QuickCheck hiding (elements)
 
 -- representing JSON
 
@@ -127,3 +128,81 @@ lookupJSON s
     set_ json (JObject fs)
       = JObject ((lookupL s) ~. json $ fs)
     set_ _ json = json
+
+
+-- generator for JSON
+
+data Config
+  = Config {
+      elements :: Int -- maximum element number in array
+    , depth    :: Int -- maximum nesting in objects
+    , fields   :: Int -- maximum of fields
+    }
+
+instance Arbitrary Config where
+  arbitrary
+    = do
+        n <- choose (1,5)
+        d <- choose (1,2)
+        f <- choose (1,5)
+        return (Config n d f)
+
+instance Arbitrary JSON where
+  arbitrary
+    = do
+        cfg <- arbitrary :: Gen Config
+        generateJSON cfg
+
+decrease :: Config -> Config
+decrease cfg
+  = cfg {depth = (depth cfg) - 1}
+
+generateJSON :: Config -> Gen JSON
+generateJSON cfg
+  | depth cfg <= 1
+    = frequency
+      [
+        (1, return JNull)
+      , (9, JBool <$> arbitrary)
+      , (10, JNumber <$> generateNumber)
+      , (10, JString <$> generateStringLit cfg)
+      ]
+  | otherwise
+    = frequency
+      [
+        (1, return JNull)
+      , (9, JBool <$> arbitrary)
+      , (10, JNumber <$> generateNumber)
+      , (10, JString <$> generateStringLit cfg')
+      , (35, JArray <$> generateArray cfg')
+      , (35, JObject <$> generateObject cfg')
+      ]
+    where
+      cfg' = decrease cfg
+
+generateNumber :: Gen Int
+generateNumber
+  = suchThat (arbitrary :: Gen Int)
+             (>= 0)
+
+generateStringLit :: Config -> Gen String
+generateStringLit cfg
+  = vectorOf (elements cfg)
+             (choose ('a', 'z'))
+
+generateArray :: Config -> Gen [JSON]
+generateArray cfg
+  = vectorOf (elements cfg)
+             (generateJSON cfg)
+
+generateObject :: Config -> Gen [(String, JSON)]
+generateObject cfg
+  = do
+      let d = depth cfg
+      m <- choose (1, fields cfg)
+      vectorOf m (fieldGen cfg)
+
+fieldGen :: Config -> Gen (String, JSON)
+fieldGen cfg
+  = liftA2 (,) (generateStringLit cfg)
+               (generateJSON cfg)

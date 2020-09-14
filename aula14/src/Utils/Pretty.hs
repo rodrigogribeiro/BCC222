@@ -77,7 +77,7 @@ punctuate _ []
 punctuate _ [d]
   = [d]
 punctuate p (d : ds)
-  = (d <> p) : punctuate d ds
+  = (d <> p) : punctuate p ds
 
 series :: Char -> Char -> (a -> Doc) -> [a] -> Doc
 series open close item

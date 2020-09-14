@@ -160,7 +160,7 @@ digit = f <$> digitChar
           f c = ord c - ord '0'
 
 natural :: Parser Char Int
-natural = foldl f 0 <$> many digit
+natural = foldl f 0 <$> many1 digit
      where
        f ac d = ac * 10 + d
 

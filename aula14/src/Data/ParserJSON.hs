@@ -10,8 +10,8 @@ jsonParser :: Parser Char JSON
 jsonParser
   = nullParser   <|>
     boolParser   <|>
-    numberParser <|>
     stringParser <|>
+    numberParser <|>
     arrayParser  <|>
     objectParser  
     

@@ -22,6 +22,6 @@ prettyJSON (JObject obj)
       fields' = punctuate (char ',') fields
       fields
         = map build obj
-      build (k,v) = text k <> text " = " <> prettyJSON v
+      build (k,v) = (enclose '"' '"' (text k)) <> text " : " <> prettyJSON v
 prettyJSON (JArray arr)
-  = hcat $ punctuate (char ',') $ map prettyJSON arr
+  = enclose '[' ']' $ hcat $ punctuate (char ',') $ map prettyJSON arr
