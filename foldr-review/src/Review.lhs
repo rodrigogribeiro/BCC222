@@ -109,14 +109,14 @@ filter p (x : xs)
 >   where
 >     base = []
 >     step x ac
->      | p x = x : ac
->      | otherwise = ac
+>       | p x = x : ac
+>       | otherwise = ac
 
 all :: (a -> Bool) ->
        [a]         ->
        Bool
 all _ [] = True
-all p (x : xs) = p x && all xs
+all p (x : xs) = p x && all p xs
 
 
 > all :: (a -> Bool) ->
@@ -153,6 +153,7 @@ map f (x : xs) = f x : map f xs
 >      base = []
 >      step x ac = f x : ac
 
+
 (++) :: [a] -> [a] -> [a]
 [] ++ ys = ys
 (x : xs) ++ ys = x : (xs ++ ys)
@@ -163,8 +164,6 @@ map f (x : xs) = f x : map f xs
 >     where
 >       base = ys
 >       step x ac = x : ac
-
-
 
 takeWhile :: (a -> Bool) ->
              [a]         ->
