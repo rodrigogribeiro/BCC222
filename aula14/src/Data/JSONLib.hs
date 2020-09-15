@@ -1,12 +1,23 @@
 module Data.JSONLib ( module Data.JSON
                     , prettyJSON
-                    , parseJSON) where
+                    , parseJSON
+                    , ToJSON (..)
+                    , FromJSON (..)) where
 
 import Utils.Pretty (pretty)
 import Utils.Parser (runParser)
 import Data.JSON
 import Data.ParserJSON
 import qualified Data.PrettyJSON as P
+
+
+-- interface for the programmer
+
+class ToJSON a where
+  toJSON :: a -> JSON
+
+class FromJSON a where
+  fromJSON :: JSON -> a
 
 
 prettyJSON :: JSON -> String
