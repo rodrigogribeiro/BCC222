@@ -143,7 +143,7 @@ instance Arbitrary Config where
   arbitrary
     = do
         n <- choose (1,5)
-        d <- choose (1,2)
+        d <- choose (1,5)
         f <- choose (1,5)
         return (Config n d f)
 
