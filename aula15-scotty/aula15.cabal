@@ -32,7 +32,8 @@ library
   hs-source-dirs:
       src
   build-depends:
-      base >=4.7 && <5
+      aeson
+    , base >=4.7 && <5
     , blaze-html
     , http-types
     , scotty
@@ -46,6 +47,7 @@ executable aula15-exe
       HelloBlaze
       HelloHamlet
       HelloId
+      HelloJSON
       HelloWeb
       HelloWeb404
       Paths_aula15
@@ -53,7 +55,8 @@ executable aula15-exe
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      aula15
+      aeson
+    , aula15
     , base >=4.7 && <5
     , blaze-html
     , http-types
@@ -67,6 +70,7 @@ executable hello-blaze
   other-modules:
       HelloHamlet
       HelloId
+      HelloJSON
       HelloWeb
       HelloWeb404
       Main
@@ -75,7 +79,8 @@ executable hello-blaze
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N -main-is HelloBlaze
   build-depends:
-      aula15
+      aeson
+    , aula15
     , base >=4.7 && <5
     , blaze-html
     , http-types
@@ -89,6 +94,7 @@ executable hello-hamlet
   other-modules:
       HelloBlaze
       HelloId
+      HelloJSON
       HelloWeb
       HelloWeb404
       Main
@@ -97,7 +103,8 @@ executable hello-hamlet
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N -main-is HelloHamlet
   build-depends:
-      aula15
+      aeson
+    , aula15
     , base >=4.7 && <5
     , blaze-html
     , http-types
@@ -111,6 +118,7 @@ executable hello-id
   other-modules:
       HelloBlaze
       HelloHamlet
+      HelloJSON
       HelloWeb
       HelloWeb404
       Main
@@ -119,7 +127,32 @@ executable hello-id
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N -main-is HelloId
   build-depends:
-      aula15
+      aeson
+    , aula15
+    , base >=4.7 && <5
+    , blaze-html
+    , http-types
+    , scotty
+    , shakespeare
+    , text
+  default-language: Haskell2010
+
+executable hello-json
+  main-is: HelloJSON.hs
+  other-modules:
+      HelloBlaze
+      HelloHamlet
+      HelloId
+      HelloWeb
+      HelloWeb404
+      Main
+      Paths_aula15
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N -main-is HelloJSON
+  build-depends:
+      aeson
+    , aula15
     , base >=4.7 && <5
     , blaze-html
     , http-types
@@ -134,6 +167,7 @@ executable hello-web
       HelloBlaze
       HelloHamlet
       HelloId
+      HelloJSON
       HelloWeb404
       Main
       Paths_aula15
@@ -141,7 +175,8 @@ executable hello-web
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N -main-is HelloWeb
   build-depends:
-      aula15
+      aeson
+    , aula15
     , base >=4.7 && <5
     , blaze-html
     , http-types
@@ -156,6 +191,7 @@ executable hello-web404
       HelloBlaze
       HelloHamlet
       HelloId
+      HelloJSON
       HelloWeb
       Main
       Paths_aula15
@@ -163,7 +199,8 @@ executable hello-web404
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N -main-is HelloWeb404
   build-depends:
-      aula15
+      aeson
+    , aula15
     , base >=4.7 && <5
     , blaze-html
     , http-types
@@ -181,7 +218,8 @@ test-suite aula15-test
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      aula15
+      aeson
+    , aula15
     , base >=4.7 && <5
     , blaze-html
     , http-types

@@ -1,6 +1,6 @@
-name:                aula15
+name:                aula15-servant
 version:             0.1.0.0
-github:              "githubuser/aula15"
+github:              "githubuser/aula15-servant"
 license:             BSD3
 author:              "Author name here"
 maintainer:          "example@example.com"
@@ -17,21 +17,23 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/githubuser/aula15#readme>
+description:         Please see the README on GitHub at <https://github.com/githubuser/aula15-servant#readme>
 
 dependencies:
 - base >= 4.7 && < 5
-- scotty
-- text
-- http-types
-- blaze-html
-- shakespeare
+- servant
+- aeson
+- servant-server
+- wai
+- wai-cors
+- warp
+
 
 library:
   source-dirs: src
 
 executables:
-  aula15-exe:
+  aula15-servant-exe:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
@@ -39,62 +41,20 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - aula15
-  hello-web:
-    main:                HelloWeb.hs
+    - aula15-servant
+  first-version:
+    main:                FirstVersion.hs
     source-dirs:         app
     ghc-options:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
-    - -main-is HelloWeb
+    - -main-is FirstVersion
     dependencies:
-    - aula15
-  hello-web404:
-    main:                HelloWeb404.hs
-    source-dirs:         app
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    - -main-is HelloWeb404
-    dependencies:
-    - aula15
-  hello-id:
-    main:                HelloId.hs
-    source-dirs:         app
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    - -main-is HelloId
-    dependencies:
-    - aula15
-  hello-blaze:
-    main:                HelloBlaze.hs
-    source-dirs:         app
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    - -main-is HelloBlaze
-    dependencies:
-    - aula15
-  hello-hamlet:
-    main:                HelloHamlet.hs
-    source-dirs:         app
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    - -main-is HelloHamlet
-    dependencies:
-    - aula15
-
-
+    - aula15-servant
 
 tests:
-  aula15-test:
+  aula15-servant-test:
     main:                Spec.hs
     source-dirs:         test
     ghc-options:
@@ -102,4 +62,4 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - aula15
+    - aula15-servant

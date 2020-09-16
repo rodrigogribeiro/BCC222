@@ -1,16 +1,26 @@
+{-# LANGUAGE DeriveGeneric #-}
+
 module Product where
 
+import Data.Aeson
+import GHC.Generics
 
 data Product
   = Product {
-      code :: Int
-    , name :: String
+      code        :: Int
+    , name        :: String
     , description :: String
-    , price :: Double
-    , quantity :: Int
-    } deriving (Eq, Ord, Show)
+    , price       :: Float
+    , quantity    :: Int
+    } deriving (Eq, Ord, Show, Generic)
 
--- list of products
+-- JSON stuff
+
+instance ToJSON Product
+instance FromJSON Product
+
+
+-- simple product list
 
 database :: [Product]
 database
@@ -21,15 +31,3 @@ database
     , Product 4 "Weiss" "Cerveja Weiss" 30.0 20
     , Product 5 "Stout" "Cerveja Stout" 40.0 10
     ]
-
--- searching
-
-searchByCode :: Int -> Maybe Product
-searchByCode n
-  = searchByCode' n database
-
-searchByCode' :: Int -> [Product] -> Maybe Product
-searchByCode' n [] = Nothing
-searchByCode' n (p : ps)
-  | n == code p = Just p
-  | otherwise   = searchByCode' n ps

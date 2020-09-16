@@ -1,6 +1,6 @@
 {-# LANGUAGE QuasiQuotes, TemplateHaskell, OverloadedStrings #-}
 
-module HelloHamlet where
+module HelloJSON where
 
 import Product
 
@@ -15,6 +15,8 @@ import Text.Blaze.Html.Renderer.Text (renderHtml)
 import Web.Scotty
 
 
+-- root page
+
 mainPage :: ActionM ()
 mainPage
   =  html $ renderHtml
@@ -25,6 +27,8 @@ mainPage
                       <h1> Meu Primeiro backend Haskell|]
 
 
+--  simple page for showing product information
+
 productTags :: Product -> H.Markup
 productTags p
   = [shamlet| <html>
@@ -34,6 +38,7 @@ productTags p
                    <h1>#{name p}
                    <p id=desc>#{description p}|]
 
+-- the page for product information
 
 productPage :: ActionM ()
 productPage
@@ -45,6 +50,8 @@ productPage
          html $ renderHtml (productTags p)
        Nothing -> errorPage (pack $ show pcode)
 
+-- page for error 404
+
 errorPage :: Text -> ActionM ()
 errorPage s
   = do
@@ -55,6 +62,38 @@ errorPage s
            then "Not Found :("
            else "Product not found:" <> s
 
+-- page for listing all products
+
+productListPage :: ActionM ()
+productListPage
+  = html $ renderHtml
+      [shamlet|
+         <html>
+           <body>
+             <h1> Products
+             <table>
+                <tr>
+                  <th> Name
+                  <th> Description
+                  <th> Price
+                $forall ap <- database
+                  <tr>
+                    <td>#{name ap}
+                    <td>#{description ap}
+                    <td>#{price ap}|]
+
+-- getting a json for a product
+
+jsonProduct :: ActionM ()
+jsonProduct
+  = do
+      c <- param "code"
+      let pr = searchByCode c
+      case pr of
+        Just p  -> json p
+        Nothing -> errorPage (pack (show c))
+
+-- starting the server
 
 main :: IO ()
 main
@@ -64,5 +103,9 @@ main
         get "/" mainPage
         -- route 2: product info page
         get "/product/:code" productPage
-        -- route 3: 404 error page
+        -- route 3: listing products
+        get "/products" productListPage
+        -- route 4: json for product
+        get "/json/product/:code" jsonProduct
+        -- route 5: 404 error page
         notFound $ errorPage ""
