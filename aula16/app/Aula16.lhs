@@ -827,6 +827,9 @@ id y : ys        = -- def. de id
 y : ys
 ~~~~~
 
+Map Fusion
+==========
+
 Map fusion
 ==========
 
@@ -838,6 +841,16 @@ um único.
 ~~~~~{.haskell}
 forall xs :: [a], f :: a -> b, g :: b -> c. (map g . map f) xs = map (g . f) xs
 ~~~~~~
+
+Composição
+==========
+
+- Definindo composição de funções:
+
+~~~~{.haskell}
+(.) :: (b -> c) -> (a -> b) -> a -> c
+(g . f) x = g (f x)
+~~~~~
 
 Map fusion
 ==========
@@ -1021,6 +1034,11 @@ Exercício
 forall xs f. length (map f xs) = length xs
 ~~~~~
 
+
+Reverse
+=======
+
+
 Reverse
 =======
 
@@ -1156,6 +1174,11 @@ Exercício
 ~~~~~{.haskell}
 forall xs f. reverse (map f xs) = map f (reverse xs)
 ~~~~~~
+
+
+Fold/Map fusion
+===============
+
 
 Fold/Map fusion
 ===============
@@ -1590,35 +1613,16 @@ de multiplicação.
 Máquina de pilha
 ================
 
-- Interpretador
-
-\begin{code}
-type Stack = [Int]
-
-instr :: Instr -> Stack -> Stack
-instr (Push n) s = n : s
-instr Add (n : n' : s) = (n + n') : s
-\end{code}
-
-Exercício
-=========
-
-- Estenda o interpretador de instruções para incluir a operação
-de multiplicação.
-
-
-Máquina de pilha
-================
-
 - Interpretando um programa
 
 \begin{code}
 type Program = [Instr]
+type Stack = [Int]
 
 exec :: Program -> Stack -> Stack
 exec [] s = s
-exec (Push n : ps) s = n : s
-exec (Add : ps) (n : m : s) = (n + m) : s
+exec (Push n : ps) s = exec ps (n : s)
+exec (Add : ps) (n : m : s) = exec ps ((n + m) : s)
 \end{code}
 
 Exercício
@@ -1626,9 +1630,6 @@ Exercício
 
 - Estenda o interpretador de programas para incluir a operação
 de multiplicação.
-
-Exercício
-=========
 
 - Implemente a função `exec` usando `foldl`.
 
