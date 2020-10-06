@@ -53,7 +53,7 @@ Agda
 - Definindo igualdade.
 
 ```agda
-infix 4 _≡_
+infix 4 _≡_ -- \==  
 
 data _≡_ {A : Set}(x : A) : A → Set where
   refl : x ≡ x
@@ -72,6 +72,9 @@ test1 = refl
 
 test2 : not true ≡ false
 test2 = refl
+
+test3 : false ≡ false
+test3 = refl
 ```
 
 Agda
@@ -92,8 +95,14 @@ Agda
 
 ```agda
 not-inv : ∀ (b : Bool) → not (not b) ≡ b
-not-inv b = {!!}
+not-inv true = refl
+not-inv false = refl
 ```
+Ctrl-c Ctrl-l : carrega o código.
+? : cria um hole
+Ctrl-c Ctrl-, : mostra o conteúdo de um hole.
+Ctrl-c Ctrl-SPC : tenta preencher um hole com uma expressão
+Ctrl-c Ctrl-a : tenta calcular um hole automaticamente.
 
 Agda
 ====
@@ -123,7 +132,11 @@ b ∧ true ≡ true
 
 ```agda
 ∧-true-r : ∀ (b : Bool) → b ∧ true ≡ b
-∧-true-r b = {!!}
+∧-true-r true = refl
+∧-true-r false = refl
+
+∧-true-l : ∀ (b : Bool) → true ∧ b ≡ b
+∧-true-l b = refl
 ```
 
 Agda
@@ -162,8 +175,8 @@ Agda
 
 ```agda
 or-false-l : ∀ (b : Bool) → false ∨ b ≡ b
-or-false-l b = ?
+or-false-l b = {!!}
 
 or-false-r : ∀ (b : Bool) → b ∨ false ≡ b
-or-false-r b = ?
+or-false-r b = {!!}
 ```

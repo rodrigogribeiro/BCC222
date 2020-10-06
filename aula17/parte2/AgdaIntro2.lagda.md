@@ -38,10 +38,10 @@ Lógica
 - Falso: conjunto vazio
 
 ```agda
-data ⊤ : Set where
+data ⊤ : Set where -- \top
   tt : ⊤
 
-data ⊥ : Set where
+data ⊥ : Set where -- \bot
 ```
 
 Lógica
@@ -54,13 +54,13 @@ Lógica
 ¬ A = A → ⊥
 
 absurd : {A : Set} → ⊥ → A
-absurd ()
+absurd () -- absurd pattern
 ```
 
 Lógica
 ======
 
-- Conjunção
+- Conjunção      
 
 ```agda
 data _∧_ (A B : Set) : Set where
@@ -178,3 +178,5 @@ Lógica
 dummy : Σ Bool (λ b → b ≡ true)
 dummy = true , refl
 ```
+
+Ctrl-c Ctr-r

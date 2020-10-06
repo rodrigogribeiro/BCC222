@@ -84,13 +84,11 @@ Teorema
 ++-length [] ys = refl
 ++-length (x ∷ xs) ys
   = begin
-     length (x ∷ xs ++ ys)       ≡⟨ refl ⟩
-     length (x ∷ (xs ++ ys))     ≡⟨ refl ⟩
-     1 + length (xs ++ ys)       ≡⟨ cong succ
-                                         (++-length xs ys) ⟩
-     1 + (length xs + length ys) ≡⟨ refl ⟩
-     (1 + length xs) + length ys ≡⟨ refl ⟩
-     length (x ∷ xs) + length ys
+       length ((x ∷ xs) ++ ys)      ≡⟨ refl ⟩
+       length (x ∷ (xs ++ ys))      ≡⟨ refl ⟩
+       succ (length (xs ++ ys))     ≡⟨ cong succ (++-length xs ys) ⟩
+       succ (length xs + length ys) ≡⟨ refl ⟩
+       length (x ∷ xs) + length ys
     ∎
 ```
 
@@ -129,12 +127,12 @@ Exemplo
 map-id : ∀ {A : Set}(xs : List A) → map id xs ≡ xs
 map-id [] = refl
 map-id (x ∷ xs)
-  = begin
-     map id (x ∷ xs)  ≡⟨ refl ⟩
-     id x ∷ map id xs ≡⟨ cong (_∷_ x) (map-id xs) ⟩
-     id x ∷ xs        ≡⟨ refl ⟩
-     x ∷ xs
-    ∎
+   = begin
+       map id (x ∷ xs)  ≡⟨ refl ⟩
+       id x ∷ map id xs ≡⟨ refl ⟩
+       x ∷ map id xs    ≡⟨ cong (_∷_ x) (map-id xs) ⟩
+       x ∷ xs
+     ∎
 ```
 
 Map Fusion
@@ -149,25 +147,17 @@ map-fusion : ∀ {A B C : Set}
                (xs : List A) →
                map (g ∙ f) xs ≡ (map g ∙ map f) xs
 map-fusion g f [] = refl
-```
-
-Map Fusion
-==========
-
-- Continuação
-
-```agda
 map-fusion g f (x ∷ xs)
   = begin
-      map (g ∙ f) (x ∷ xs)             ≡⟨ refl ⟩
-      ((g ∙ f) x) ∷ map (g ∙ f) xs     ≡⟨ refl ⟩
-      ((g ∙ f) x) ∷ map (g ∙ f) xs     ≡⟨ cong (_∷_ ((g ∙ f) x))
-                                               (map-fusion g f xs) ⟩
-      ((g ∙ f) x) ∷ (map g ∙ map f) xs ≡⟨ refl ⟩
-      g (f x) ∷ (map g (map f xs))     ≡⟨ refl ⟩
-      map g ((f x) ∷ map f xs)         ≡⟨ refl ⟩
-      map g (map f (x ∷ xs))           ≡⟨ refl ⟩
-      (map g ∙ map f) (x ∷ xs)
+       map (g ∙ f) (x ∷ xs)           ≡⟨ refl ⟩
+       (g ∙ f) x ∷ map (g ∙ f) xs     ≡⟨ refl ⟩
+       g (f x) ∷ map (g ∙ f) xs       ≡⟨ cong (_∷_ (g (f x)))
+                                              (map-fusion g f xs) ⟩
+       g (f x) ∷ ((map g ∙ map f) xs) ≡⟨ refl ⟩
+       g (f x) ∷ (map g (map f xs))   ≡⟨ refl ⟩
+       map g (f x ∷ map f xs)         ≡⟨ refl ⟩
+       map g (map f (x ∷ xs))         ≡⟨ refl ⟩
+       (map g ∙ map f) (x ∷ xs)
     ∎
 ```
 
@@ -217,9 +207,9 @@ Reverse
 - Relacionando concatenação e lista vazia.
 
 ```agda
-++-[]-r : ∀ {A : Set}{xs : List A} → xs ++ [] ≡ xs
-++-[]-r {_}{[]} = refl
-++-[]-r {_}{x ∷ xs} = cong (_∷_ x) (++-[]-r {_}{xs})
+++-[]-r : ∀ {A : Set}(xs : List A) → xs ++ [] ≡ xs
+++-[]-r [] = refl
+++-[]-r (x ∷ xs) = cong (_∷_ x) (++-[]-r xs)
 ```
 
 Reverse
@@ -230,18 +220,19 @@ Reverse
 ```agda
 ++-reverse : ∀ {A : Set}(xs ys : List A) →
                reverse (xs ++ ys) ≡ reverse ys ++ reverse xs
-++-reverse [] ys = sym ++-[]-r
+++-reverse [] ys = sym (++-[]-r (reverse ys))
 ++-reverse (x ∷ xs) ys
-  = begin
-      reverse (x ∷ xs ++ ys)              ≡⟨ refl ⟩
-      reverse (xs ++ ys) ++ [ x ]         ≡⟨ cong (λ ys → ys ++ [ x ])
-                                                  (++-reverse xs ys) ⟩
-      (reverse ys ++ reverse xs) ++ [ x ] ≡⟨ ++-assoc (reverse ys)
+   = begin
+       reverse ((x ∷ xs) ++ ys) ≡⟨ {!!} ⟩
+       reverse (x ∷ (xs ++ ys))            ≡⟨ refl ⟩
+       reverse (xs ++ ys) ++ [ x ]         ≡⟨ cong (λ ys → ys ++ [ x ])
+                                                   (++-reverse xs ys) ⟩
+       (reverse ys ++ reverse xs) ++ [ x ] ≡⟨ ++-assoc (reverse ys)
                                                        (reverse xs)
                                                        [ x ] ⟩
-      reverse ys ++ (reverse xs ++ [ x ]) ≡⟨ refl ⟩
-      reverse ys ++ reverse (x ∷ xs)
-    ∎
+       reverse ys ++ (reverse xs ++ [ x ]) ≡⟨ refl ⟩
+       reverse ys ++ reverse (x ∷ xs)
+     ∎
 ```
 
 Reverse
@@ -255,12 +246,9 @@ reverse-inv : ∀ {A : Set}(xs : List A) →
 reverse-inv [] = refl
 reverse-inv (x ∷ xs)
   = begin
-      reverse (reverse (x ∷ xs)) ≡⟨ refl ⟩
-      reverse (reverse xs ++ [ x ]) ≡⟨ ++-reverse (reverse xs) [ x ] ⟩
-      reverse [ x ] ++ reverse (reverse xs) ≡⟨ cong (_∷_ x)
-                                                    (reverse-inv xs) ⟩
-      reverse [ x ] ++ xs ≡⟨ refl ⟩
-      [ x ] ++ xs ≡⟨ refl ⟩
+      reverse (reverse (x ∷ xs))              ≡⟨ refl ⟩
+      reverse (reverse xs ++ [ x ])           ≡⟨ ++-reverse (reverse xs) [ x ] ⟩
+      reverse [ x ] ++ (reverse (reverse xs)) ≡⟨ cong (_∷_ x) (reverse-inv xs) ⟩
       x ∷ xs
     ∎
 ```
@@ -311,16 +299,16 @@ Fold-Map Fusion
 ```agda
 fold-map-fusion f g v [] = refl
 fold-map-fusion f g v (x ∷ xs)
-   = begin
-       (foldr g v ∙ map f) (x ∷ xs)       ≡⟨ refl ⟩
-       foldr g v (map f (x ∷ xs))         ≡⟨ refl ⟩
-       foldr g v (f x ∷ map f xs)         ≡⟨ refl ⟩
-       g (f x) (foldr g v (map f xs))     ≡⟨ refl ⟩
-       (g ∙ f) x ((foldr g v ∙ map f) xs) ≡⟨ cong (λ y → g (f x) y)
-                                                  (fold-map-fusion f g v xs) ⟩
-       (g ∙ f) x (foldr (g ∙ f) v xs)     ≡⟨ refl ⟩
-       foldr (g ∙ f) v (x ∷ xs)
-     ∎
+  = begin
+      (foldr g v ∙ map f) (x ∷ xs) ≡⟨ refl ⟩
+      foldr g v (map f (x ∷ xs))   ≡⟨ refl ⟩
+      foldr g v (f x ∷ map f xs)   ≡⟨ refl ⟩
+      g (f x) (foldr g v (map f xs)) ≡⟨ refl ⟩
+      (g ∙ f) x ((foldr g v ∙ map f) xs) ≡⟨ cong (λ v → g (f x) v)
+                                                 (fold-map-fusion f g v xs) ⟩
+      (g ∙ f) x (foldr (g ∙ f) v xs) ≡⟨ refl ⟩
+      foldr (g ∙ f) v (x ∷ xs)
+    ∎
 ```
 
 Pertinência
@@ -372,3 +360,4 @@ Pertinência
              x ∈ ys → x ∈ (xs ++ ys)
 ++-∈-r-2 = {!!}
 ```
+

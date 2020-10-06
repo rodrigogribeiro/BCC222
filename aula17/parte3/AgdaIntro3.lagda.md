@@ -26,13 +26,17 @@ _∙_ : ∀ {A B C : Set} →
         (A → B)       →
         (A → C)
 g ∙ f = λ x → g (f x)
+
+data _⊎_ (A B : Set) : Set where
+  inl : A → A ⊎ B
+  inr : B → A ⊎ B
 ```
 -->
 
 - Representação em Agda
 
 ```agda
-data ℕ : Set where
+data ℕ : Set where -- \BN
   zero : ℕ
   succ : ℕ → ℕ
 
@@ -91,27 +95,15 @@ Soma
    
 ```agda
 +-zero-r : ∀ (n : ℕ) → n + 0 ≡ n
-```
-
-Soma
-====
-
-- Caso base
-   - Tipo do caso base: `zero + zero ≡ zero`
-
-```agda
 +-zero-r zero = refl
-```
-
-Soma
-====
-
-- Passo recursivo
-
-```agda
 +-zero-r (succ n)
-   = cong succ (+-zero-r n)
+   = begin
+       succ n + 0     ≡⟨ refl ⟩
+       succ (n + 0)   ≡⟨ cong succ (+-zero-r n) ⟩
+       succ n
+     ∎
 ```
+
 
 Soma
 ====
@@ -122,7 +114,12 @@ Soma
 +-succ : ∀ (n m : ℕ) → succ (n + m) ≡ n + succ m
 +-succ zero m = refl
 +-succ (succ n) m
-   = cong succ (+-succ n m)
+  = begin
+      succ (succ n + m)    ≡⟨ refl ⟩
+      succ (succ (n + m))  ≡⟨ cong succ (+-succ n m) ⟩
+      succ (n + succ m)    ≡⟨ refl ⟩
+      succ n + succ m
+    ∎
 ```
 
 Soma
@@ -135,10 +132,10 @@ Soma
 +-comm zero m = sym (+-zero-r m)
 +-comm (succ n) m
    = begin
-      succ n + m   ≡⟨ refl ⟩
-      succ (n + m) ≡⟨ cong succ (+-comm n m) ⟩
-      succ (m + n) ≡⟨ +-succ m n ⟩
-      m + succ n
+       succ n + m   ≡⟨ refl ⟩
+       succ (n + m) ≡⟨ cong succ (+-comm n m) ⟩
+       succ (m + n) ≡⟨ +-succ m n ⟩
+       m + succ n
      ∎
 ```
 
@@ -241,8 +238,8 @@ Predicados
 ≤-total zero m = n≤m ≤-zero
 ≤-total (succ n) zero = m≤n ≤-zero
 ≤-total (succ n) (succ m) with ≤-total n m
-...| n≤m p = n≤m (≤-succ p)
-...| m≤n q = m≤n (≤-succ q)
+... | n≤m p = n≤m (≤-succ p)
+... | m≤n q = m≤n (≤-succ q)
 ```
 
 Exercício
@@ -297,8 +294,8 @@ even : ∀ n → Dec (Even n)
 even zero = yes zero
 even (succ zero) = no (λ ())
 even (succ (succ n)) with even n
-...| yes p = yes (succ p)
-...| no  q = no (q ∙ even-succ-inv)
+... | yes p = yes (succ p)
+... | no q = no (q ∙ even-succ-inv)
 ```
 
 Exercício
@@ -309,4 +306,23 @@ Exercício
 ```agda
 +-even : ∀ {n m} → Even n → Even m → Even (n + m)
 +-even = {!!}
+```
+
+Exercício
+=========
+
+- Definir um predicado para números ímpares
+
+```agda
+data Odd : ℕ → Set where
+```
+
+Exercício
+=========
+
+- Provar o teorema
+
+```agda
+allN : ∀ (n : ℕ) → Even n ⊎ Odd n
+allN n = {!!}
 ```
